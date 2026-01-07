@@ -295,16 +295,32 @@ docker compose version
 
 #### Step 3: Create Folder Structure
 
-```bash
-# Create all directories
-sudo mkdir -p /opt/mediaserver/{docker,config/{jellyfin,jellyseerr,sabnzbd,sonarr,radarr,prowlarr},data/{usenet/{complete,incomplete},media/{movies,tv}}}
+1.  **Download the script:**
+    ```bash
+    wget https://raw.githubusercontent.com/cloudnin9/media-server/main/create-directories.sh -O create-directories.sh
+    ```
+    (Note: Replace `cloudnin9` with your GitHub username if you forked the repository)
 
-# Set ownership to your user
-sudo chown -R $USER:$USER /opt/mediaserver
+2.  **Make the script executable:**
+    ```bash
+    chmod +x create-directories.sh
+    ```
+    
+3.  **Run the script:**
+    ```bash
+    ./create-directories.sh
+    ```
+    This script will create the necessary folder structure at `/opt/mediaserver` by default. You can edit the `BASE_DIR` variable within the script if you wish to use a different path.
 
-# Verify
-ls -la /opt/mediaserver/
-```
+4.  **Set ownership to your user:**
+    ```bash
+    sudo chown -R $USER:$USER /opt/mediaserver
+    ```
+
+5.  **Verify:**
+    ```bash
+    ls -la /opt/mediaserver/
+    ```
 
 ---
 
@@ -1149,7 +1165,10 @@ For production setups, consider:
 
 ## 10. Windows Network Configuration
 
-### Adding Hostname Aliases (Optional)
+### Adding Hostname Aliases (Windows Only)
+
+This section describes a Windows-specific PowerShell script (`add-host-alias.ps1`) for adding hostname aliases.
+
 
 If you want your PC to respond to additional hostnames on the network (e.g., "mediaserver"):
 
