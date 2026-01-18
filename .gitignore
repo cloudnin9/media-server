@@ -11,3 +11,8 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Beads issue tracker files (only tracked in beads-sync branch)
+.beads/issues.jsonl
+.beads/interactions.jsonl
+.beads/sync_base.jsonl
