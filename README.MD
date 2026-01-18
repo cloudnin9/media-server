@@ -16,9 +16,10 @@ This guide walks you through setting up a complete automated media server from s
 8. [Connecting Devices to Jellyfin](#8-connecting-devices-to-jellyfin)
 9. [Remote Access (Optional)](#9-remote-access-optional)
 10. [Windows Network Configuration](#10-windows-network-configuration)
-11. [Troubleshooting](#11-troubleshooting)
-12. [Maintenance & Tips](#12-maintenance--tips)
-13. [Advanced: Spotweb (Self-Hosted Indexer)](#13-advanced-spotweb-self-hosted-indexer)
+11. [Hardware Transcoding Setup (Linux)](#11-hardware-transcoding-setup-linux)
+12. [Troubleshooting](#12-troubleshooting)
+13. [Maintenance & Tips](#13-maintenance--tips)
+14. [Advanced: Spotweb (Self-Hosted Indexer)](#14-advanced-spotweb-self-hosted-indexer)
 
 ---
 
@@ -1200,7 +1201,49 @@ If you prefer to change the actual hostname:
 
 ---
 
-## 11. Troubleshooting
+## 11. Hardware Transcoding Setup (Linux)
+
+**If you're running this media server on a Linux host**, you can dramatically improve transcoding performance by enabling hardware acceleration. The `docker-compose.yml` is pre-configured for Intel/AMD GPUs.
+
+### Quick Setup (Intel/AMD GPUs)
+
+1. **Find your render group ID:**
+   ```bash
+   getent group render | cut -d: -f3
+   ```
+
+2. **Add it to your `.env` file:**
+   ```bash
+   RENDER_GROUP_ID=109  # Your value from step 1
+   ```
+
+3. **Verify device access:**
+   ```bash
+   ls -la /dev/dri
+   ```
+
+4. **Start containers:**
+   ```bash
+   docker compose up -d
+   ```
+
+5. **Configure Jellyfin:**
+   - Dashboard → Playback → Transcoding
+   - Hardware acceleration: **Video Acceleration API (VAAPI)**
+   - VA-API Device: `/dev/dri/renderD128`
+
+### For NVIDIA GPUs
+
+If you have an NVIDIA GPU, see the detailed guide: **[HARDWARE_TRANSCODING.md](HARDWARE_TRANSCODING.md)**
+
+This includes:
+- NVIDIA Container Toolkit installation
+- Docker Compose configuration changes
+- Performance comparisons and troubleshooting
+
+---
+
+## 12. Troubleshooting
 
 ### Docker Networking Issues
 
@@ -1271,7 +1314,7 @@ Then restart Docker Desktop.
 
 ---
 
-## 12. Maintenance & Tips
+## 13. Maintenance & Tips
 
 ### Useful Commands
 
@@ -1323,7 +1366,7 @@ tar -czvf ~/backups/mediaserver-config-$(date +%Y-%m-%d).tar.gz /opt/mediaserver
 
 ---
 
-## 13. Advanced: Spotweb (Self-Hosted Indexer)
+## 14. Advanced: Spotweb (Self-Hosted Indexer)
 
 Spotweb is a decentralized, self-hosted Usenet indexer based on the Spotnet protocol. It's an alternative to paid indexers like NZBGeek.
 
